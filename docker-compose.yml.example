@@ -1,0 +1,28 @@
+# docker-compose.yml.example
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    container_name: eventos_db
+    restart: always
+    env_file: .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      # Se monta el shell script que controla el orden de ejecución de los sql scripts
+      - ./Scripts/init.sh:/docker-entrypoint-initdb.d/init.sh
+      
+      - ./Scripts/ddl.sql:/scripts/ddl.sql
+      - ./Scripts/data.sql:/scripts/data.sql
+    networks:
+      default:
+        aliases:
+          - postgres
+
+  app:
+    build: .
+    container_name: simulacion_app
+    depends_on:
+      - db
+    env_file: .env

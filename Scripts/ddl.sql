@@ -41,5 +41,6 @@ CREATE TABLE reservas (
   fecha_reserva TIMESTAMP NOT NULL,
   estado INT NOT NULL DEFAULT 1 REFERENCES estados(id),
   CONSTRAINT fk_asientos_reservas FOREIGN KEY (num_asiento, id_evento)
-    REFERENCES asientos(num_asiento, id_evento)
+    REFERENCES asientos(num_asiento, id_evento),
+  CONSTRAINT unique_reservation UNIQUE (id_usuario, num_asiento)
 );
